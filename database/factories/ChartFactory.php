@@ -18,9 +18,16 @@ class ChartFactory extends Factory
             'title' => $this->faker->sentence(3),
             'description' => $this->faker->paragraph,
             'type_chart' => $this->faker->randomElement(['bar', 'line', 'pie']),
-            'chart_data' => json_encode([
-                'labels' => $this->faker->words(3),
-                'data' => $this->faker->randomElements(range(1, 100), 3),
+            'category' => json_encode($this->faker->words(3)),
+            'series' => json_encode([
+                [
+                    'name' => $this->faker->word,
+                    'data' => $this->faker->randomElements(range(1, 100), 3),
+                ],
+                [
+                    'name' => $this->faker->word,
+                    'data' => $this->faker->randomElements(range(1, 100), 3),
+                ]
             ]),
         ];
     }

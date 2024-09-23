@@ -34,8 +34,9 @@ class ChartRepository implements ChartInterface
                 'title' => $data['title'],
                 'description' => $data['description'],
                 'type_chart' => $data['type_chart'],
-                // Ensure chart_data is stored as JSON string
-                'chart_data' => json_encode($data['chart_data']),
+                // Storing categories and series in separate columns
+                'category' => json_encode($data['chart_data']['categories']),
+                'series' => json_encode($data['chart_data']['series']),
             ]);
             $charts->push($chart);
         }

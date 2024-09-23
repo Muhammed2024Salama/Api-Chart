@@ -16,7 +16,8 @@ return new class extends Migration
             $table->string('title');
             $table->text('description')->nullable();
             $table->string('type_chart');
-            $table->json('chart_data');
+            $table->json('category');
+            $table->json('series'); 
             $table->timestamps();
         });
     }
