@@ -41,7 +41,6 @@ class ChartController extends Controller
     {
         $chartsData = $request->input('charts');
 
-        // Check if there is chart data to store
         if (empty($chartsData)) {
             return ResponseHelper::error('error', 'No chart data provided.', 422);
         }
