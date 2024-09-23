@@ -19,9 +19,10 @@ class ChartResource extends JsonResource
             'title' => $this->title,
             'description' => $this->description,
             'type_chart' => $this->type_chart,
-            'chart_data' => $this->chart_data,
-            'created_at' => $this->created_at->toDateTimeString(),
-            'updated_at' => $this->updated_at->toDateTimeString(),
+            // Decode chart_data JSON string into an object/array
+            'chart_data' => json_decode($this->chart_data, true),
+            'created_at' => $this->created_at,
+            'updated_at' => $this->updated_at,
         ];
     }
 }

@@ -23,19 +23,15 @@ class StoreChartRequest extends FormRequest
     public function rules(): array
     {
         return [
-            '*.title' => [
+            'charts' => 'required|array',
+            'charts.*.title' => [
                 'required',
                 'string',
                 'max:255',
                 Rule::unique('charts'),
             ],
-            '*.description' => 'nullable|string',
-            '*.type_chart' => 'required|string',
-            '*.chart_data' => 'required|array',
-            '*.chart_data.labels' => 'required|array',
-            '*.chart_data.labels.*' => 'string|max:255',
-            '*.chart_data.data' => 'required|array',
-            '*.chart_data.data.*' => 'numeric',
+            'charts.*.description' => 'nullable|string',
+            'charts.*.type_chart' => 'required|string',
         ];
     }
 }

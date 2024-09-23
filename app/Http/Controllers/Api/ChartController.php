@@ -7,40 +7,48 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreChartRequest;
 use App\Http\Resources\ChartResource;
 use App\Interface\ChartInterface;
+use Illuminate\Http\JsonResponse;
 
 class ChartController extends Controller
 {
-    /**
-     * @var ChartInterface
-     */
     protected $chartRepository;
 
-    /**
-     * @param ChartInterface $chartRepository
-     */
     public function __construct(ChartInterface $chartRepository)
     {
         $this->chartRepository = $chartRepository;
     }
 
     /**
-     * Display a listing of the charts.
+     * Get all charts.
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
-    public function index()
+    public function index(): JsonResponse
     {
-        return $this->chartRepository->index();
+        $charts = $this->chartRepository->getAllCharts();
+        $chartResources = ChartResource::collection($charts);
+
+        return ResponseHelper::success('success', 'Charts retrieved successfully!', $chartResources);
     }
 
     /**
-     * Store a newly created chart.
+     * Store multiple charts.
      *
      * @param StoreChartRequest $request
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
-    public function store(StoreChartRequest $request)
+    public function store(StoreChartRequest $request): JsonResponse
     {
-        return $this->chartRepository->store($request->validated());
+        $chartsData = $request->input('charts');
+
+        // Check if there is chart data to store
+        if (empty($chartsData)) {
+            return ResponseHelper::error('error', 'No chart data provided.', 422);
+        }
+
+        $charts = $this->chartRepository->storeCharts($chartsData);
+        $chartResources = ChartResource::collection($charts);
+
+        return ResponseHelper::success('success', 'Charts created successfully!', $chartResources, 201);
     }
 }

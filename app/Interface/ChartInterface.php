@@ -2,16 +2,22 @@
 
 namespace App\Interface;
 
+use Illuminate\Database\Eloquent\Collection;
+
 interface ChartInterface
 {
     /**
-     * @return mixed
+     * Get all charts.
+     *
+     * @return Collection
      */
-    public function all();
+    public function getAllCharts(): Collection;
 
     /**
-     * @param array $data
-     * @return mixed
+     * Store multiple charts.
+     *
+     * @param array $chartsData
+     * @return Collection
      */
-    public function create(array $data);
+    public function storeCharts(array $chartsData): Collection;
 }

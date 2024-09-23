@@ -5,67 +5,41 @@ namespace App\Repository;
 use App\Http\Resources\ChartResource;
 use App\Interface\ChartInterface;
 use App\Models\Chart;
+use Illuminate\Database\Eloquent\Collection;
 
 class ChartRepository implements ChartInterface
 {
     /**
-     * Retrieve all charts.
+     * Get all charts.
      *
-     * @return \Illuminate\Database\Eloquent\Collection
+     * @return Collection
      */
-    public function all()
+    public function getAllCharts(): Collection
     {
         return Chart::all();
     }
 
     /**
-     * Create a new chart.
+     * Store multiple charts.
      *
-     * @param array $data
-     * @return Chart
+     * @param array $chartsData
+     * @return Collection
      */
-    public function create(array $data)
+    public function storeCharts(array $chartsData): Collection
     {
-        return Chart::create($data);
-    }
+        $charts = new Collection();
 
-    /**
-     * Handle index request logic.
-     *
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function index()
-    {
-        $charts = $this->all();
-        return response()->json([
-            'status' => 'success',
-            'message' => 'Charts retrieved successfully!',
-            'data' => ChartResource::collection($charts),
-        ]);
-    }
-
-    /**
-     * Handle store request logic.
-     *
-     * @param array $data
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function store(array $data)
-    {
-        $charts = [];
-        foreach ($data as $chartData) {
-            $charts[] = $this->create([
-                'title' => $chartData['title'],
-                'description' => $chartData['description'],
-                'type_chart' => $chartData['type_chart'],
-                'chart_data' => json_encode($chartData['chart_data']),
+        foreach ($chartsData as $data) {
+            $chart = Chart::create([
+                'title' => $data['title'],
+                'description' => $data['description'],
+                'type_chart' => $data['type_chart'],
+                // Ensure chart_data is stored as JSON string
+                'chart_data' => json_encode($data['chart_data']),
             ]);
+            $charts->push($chart);
         }
 
-        return response()->json([
-            'status' => 'success',
-            'message' => 'Charts created successfully!',
-            'data' => ChartResource::collection($charts),
-        ], 201);
+        return $charts;
     }
 }
