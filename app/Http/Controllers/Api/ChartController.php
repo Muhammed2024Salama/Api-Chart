@@ -24,28 +24,23 @@ class ChartController extends Controller
     }
 
     /**
-     * @return mixed
+     * Display a listing of the charts.
+     *
+     * @return \Illuminate\Http\JsonResponse
      */
     public function index()
     {
-        $charts = $this->chartRepository->all();
-
-        return ResponseHelper::success('success', 'Charts retrieved successfully!', ChartResource::collection($charts));
+        return $this->chartRepository->index();
     }
 
     /**
+     * Store a newly created chart.
+     *
      * @param StoreChartRequest $request
-     * @return mixed
+     * @return \Illuminate\Http\JsonResponse
      */
     public function store(StoreChartRequest $request)
     {
-        $chart = $this->chartRepository->create([
-            'title' => $request->input('title'),
-            'description' => $request->input('description'),
-            'type_chart' => $request->input('type_chart'),
-            'chart_data' => json_encode($request->input('chart_data')),
-        ]);
-
-        return ResponseHelper::success('success', 'Chart created successfully!', new ChartResource($chart), 201);
+        return $this->chartRepository->store($request->validated());
     }
 }
